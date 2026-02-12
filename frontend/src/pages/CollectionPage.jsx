@@ -14,18 +14,18 @@ const CollectionPage = () => {
   };
 
   const handleClickOutside = (e) => {
-    if (sideBarRef.current && sideBarRef.current.contains(e.target)) {
-      isSideBarOpen(false);
+    if (sideBarRef.current && !sideBarRef.current.contains(e.target)) {
+      setIsSideBarOpen(false);
     }
   };
 
   useEffect(() => {
-    // Add event listener for clicks
     document.addEventListener('mousedown', handleClickOutside);
 
-    // clear event when unmounting
-    document.removeEventListener('mousedown', handleClickOutside);
-  });
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     setTimeout(() => {
@@ -102,14 +102,14 @@ const CollectionPage = () => {
       >
         <FilterSidebar />
       </div>
-      <div className="flex grow p-4">
+      <div className="flex flex-col grow p-4">
         <h2 className="text-2xl uppercase mb-4">All Collection</h2>
 
         {/* Sort collection */}
         <SortOptions />
 
         {/* Product Grid */}
-        <ProductGrid />
+        <ProductGrid products={products} />
       </div>
     </div>
   );
