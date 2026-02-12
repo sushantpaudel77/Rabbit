@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const MyOrdersPage = () => {
   const [orders, setOrders] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // simulate fetching orders
@@ -38,6 +40,10 @@ const MyOrdersPage = () => {
     }, 1000);
   }, []);
 
+  const handleRowClick = (orderId) => {
+    navigate(`/order/${orderId}`);
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold mb-6">My Orders</h1>
@@ -59,7 +65,11 @@ const MyOrdersPage = () => {
               </thead>
               <tbody>
                 {orders.map((order) => (
-                  <tr key={order._id} className="border-t hover:bg-gray-50">
+                  <tr
+                    key={order._id}
+                    onClick={() => handleRowClick(order._id)}
+                    className="border-t hover:bg-gray-50"
+                  >
                     <td className="px-4 py-3">#{order._id}</td>
                     <td className="px-4 py-3">
                       {new Date(order.createdAt).toLocaleDateString()}
