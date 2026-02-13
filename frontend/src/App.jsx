@@ -12,6 +12,12 @@ import Checkout from './components/Cart/Checkout';
 import OrderConfirmationPage from './pages/OrderConfirmationPage';
 import OrderDetailsPage from './pages/OrderDetailsPage';
 import MyOrdersPage from './pages/MyOrdersPage';
+import AdminLayout from './components/Admin/AdminLayout';
+import AdminHomePage from './pages/AdminHomePage';
+import UserManagement from './components/Admin/UserManagement';
+import ProductManagement from './components/Admin/ProductManagement';
+import EditProductsPage from './components/Admin/EditProductsPage';
+import OrderManagement from './components/Admin/OrderManagement';
 // import { Toaster } from 'react-hot-toast';
 
 const App = () => {
@@ -19,6 +25,7 @@ const App = () => {
     <BrowserRouter>
       <Toaster position="top-right" />
       <Routes>
+        {/* ############## USERS  ##############*/}
         <Route path="/" element={<UserLayout />}>
           {/* User Layout || Outlets */}
           <Route index element={<Home />} />
@@ -35,7 +42,16 @@ const App = () => {
           <Route path="order/:id" element={<OrderDetailsPage />} />
           <Route path="my-orders" element={<MyOrdersPage />} />
         </Route>
-        <Route>{/* Admin Layout */}</Route>
+
+        {/* ############## ADMIN  ##############*/}
+        <Route path="/admin" element={<AdminLayout />}>
+          {/* Admin Layout */}
+          <Route index element={<AdminHomePage />} />
+          <Route path="users" element={<UserManagement />} />
+          <Route path="products" element={<ProductManagement />} />
+          <Route path="products/:id/edit" element={<EditProductsPage />} />
+          <Route path="orders" element={<OrderManagement />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

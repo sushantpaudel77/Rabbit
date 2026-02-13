@@ -57,6 +57,7 @@ const MyOrdersPage = () => {
                 <tr>
                   <th className="px-4 py-3 text-left">Order Id</th>
                   <th className="px-4 py-3 text-left">Created</th>
+                  <th className="px-4 py-3 text-left">Products</th>
                   <th className="px-4 py-3 text-left">Shipping Address</th>
                   <th className="px-4 py-3 text-left">Items</th>
                   <th className="px-4 py-3 text-left">Price</th>
@@ -68,7 +69,7 @@ const MyOrdersPage = () => {
                   <tr
                     key={order._id}
                     onClick={() => handleRowClick(order._id)}
-                    className="border-t hover:bg-gray-50"
+                    className="border-t hover:bg-gray-50 cursor-pointer"
                   >
                     <td className="px-4 py-3">#{order._id}</td>
                     <td className="px-4 py-3">
@@ -77,6 +78,23 @@ const MyOrdersPage = () => {
                       <span className="text-sm text-gray-500">
                         {new Date(order.createdAt).toLocaleTimeString()}
                       </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        {order.ordersItems.slice(0, 3).map((item, index) => (
+                          <img
+                            key={index}
+                            src={item.image}
+                            alt={item.name}
+                            className="w-12 h-12 object-cover rounded border"
+                          />
+                        ))}
+                        {order.ordersItems.length > 3 && (
+                          <span className="text-sm text-gray-500">
+                            +{order.ordersItems.length - 3}
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="px-4 py-3">
                       {order.shippingAddress
@@ -109,7 +127,8 @@ const MyOrdersPage = () => {
             {orders.map((order) => (
               <div
                 key={order._id}
-                className="bg-white border rounded-lg p-4 shadow-sm"
+                onClick={() => handleRowClick(order._id)}
+                className="bg-white border rounded-lg p-4 shadow-sm cursor-pointer"
               >
                 <div className="flex justify-between items-start mb-3">
                   <div>
@@ -125,6 +144,27 @@ const MyOrdersPage = () => {
                   >
                     {order.isPaid ? 'Paid' : 'Pending'}
                   </span>
+                </div>
+
+                {/* Product Images */}
+                <div className="mb-3">
+                  <div className="flex items-center gap-2">
+                    {order.ordersItems.slice(0, 4).map((item, index) => (
+                      <img
+                        key={index}
+                        src={item.image}
+                        alt={item.name}
+                        className="w-16 h-16 object-cover rounded border"
+                      />
+                    ))}
+                    {order.ordersItems.length > 4 && (
+                      <div className="w-16 h-16 bg-gray-100 rounded border flex items-center justify-center">
+                        <span className="text-sm text-gray-600 font-medium">
+                          +{order.ordersItems.length - 4}
+                        </span>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div className="space-y-2 text-sm">

@@ -87,33 +87,50 @@ const OrderDetailsPage = () => {
           <div className="overflow-x-auto">
             <h4 className="text-lg font-semibold mb-4">Products</h4>
             <table className="min-w-full text-gray-600 mb-4">
-              <thead className="bg-gray-100">
+              <thead className="bg-gray-100 text-sm uppercase text-gray-600">
                 <tr>
-                  <th className="py-2 px-4">Name</th>
-                  <th className="py-2 px-4">Unit Price</th>
-                  <th className="py-2 px-4">Quantity</th>
-                  <th className="py-2 px-4">Total</th>
+                  <th className="py-3 px-4 text-left">Product</th>
+                  <th className="py-3 px-4 text-center">Unit Price</th>
+                  <th className="py-3 px-4 text-center">Qty</th>
+                  <th className="py-3 px-4 text-right">Total</th>
                 </tr>
               </thead>
+
               <tbody>
                 {orderDetails.orderItems.map((item) => (
-                  <tr key={item.productId} className="border-b">
-                    <td className="py-2 px-4 flex items-center">
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className="w-12 h-12 object-cover rounded-lg mr-4"
-                      />
-                      <Link
-                        to={`/product/${item.productId}`}
-                        className="text-blue-500 hover:underline"
-                      >
-                        {item.name}
-                      </Link>
+                  <tr
+                    key={item.productId}
+                    className="border-b hover:bg-gray-50"
+                  >
+                    {/* Product column */}
+                    <td className="py-3 px-4">
+                      <div className="flex items-center gap-4">
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="w-14 h-14 object-cover rounded-lg border"
+                        />
+                        <Link
+                          to={`/product/${item.productId}`}
+                          className="font-medium text-gray-800 hover:text-blue-600 transition"
+                        >
+                          {item.name}
+                        </Link>
+                      </div>
                     </td>
-                    <td className="py-2 px-4">${item.price}</td>
-                    <td className="py-2 px-4">${item.quantity}</td>
-                    <td className="py-2 px-4">${item.price * item.quantity}</td>
+
+                    {/* Unit Price */}
+                    <td className="py-3 px-4 text-center font-medium">
+                      ${item.price}
+                    </td>
+
+                    {/* Quantity */}
+                    <td className="py-3 px-4 text-center">{item.quantity}</td>
+
+                    {/* Total */}
+                    <td className="py-3 px-4 text-right font-semibold">
+                      ${item.price * item.quantity}
+                    </td>
                   </tr>
                 ))}
               </tbody>
