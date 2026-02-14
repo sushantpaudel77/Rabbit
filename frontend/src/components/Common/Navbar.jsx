@@ -70,7 +70,9 @@ const Navbar = () => {
           <Link
             to="/admin"
             className="block bg-black px-2 rounded text-sm text-white"
-          >Admin</Link>
+          >
+            Admin
+          </Link>
           <Link to="/profile" className="hover:text-black">
             <HiOutlineUser className="w-6 h-6 text-gray-700" />
           </Link>
@@ -79,7 +81,7 @@ const Navbar = () => {
             className="relative  hover:text-black"
           >
             <HiOutlineShoppingBag className="h-6 w-6 text-gray-700" />
-            <span className="absolute -top-1  bg-rabbit-red text-white text-xs rounded-full px-2 py-0.5">
+            <span className="absolute -top-1 bg-rabbit-red text-white text-xs rounded-full px-2 py-0.5">
               7
             </span>
           </button>

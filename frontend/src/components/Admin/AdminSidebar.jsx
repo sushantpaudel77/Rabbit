@@ -6,6 +6,7 @@ import {
   FaStore,
   FaUser,
 } from 'react-icons/fa';
+import { PiRabbitFill } from 'react-icons/pi';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 
 const AdminSidebar = () => {
@@ -16,14 +17,16 @@ const AdminSidebar = () => {
   };
 
   return (
-    <div className="p-6">
-      <div className="mb-6">
-        <Link to="/admin" className="text-2xl font-medium">
+    <div className="bg-gray-800 text-white h-screen w-64 flex flex-col">
+      <div className="p-6 border-b border-gray-700">
+        <h2 className="text-2xl font-bold flex items-center gap-1">
+          <PiRabbitFill className="text-rabbit-red" />
           Rabbit
-        </Link>
+        </h2>
+        <p className="text-sm text-gray-400 mt-1">Admin Dashboard</p>
       </div>
-      <h2 className="text-xl font-medium mb-6 text-center">Admin Dashboard</h2>
-      <nav className="flex flex-col space-y-2">
+
+      <nav className="flex-1 p-4 space-y-2">
         <NavLink
           to="/admin/users"
           className={({ isActive }) =>
@@ -35,6 +38,7 @@ const AdminSidebar = () => {
           <FaUser />
           <span>Users</span>
         </NavLink>
+
         <NavLink
           to="/admin/products"
           className={({ isActive }) =>
@@ -46,6 +50,7 @@ const AdminSidebar = () => {
           <FaBoxOpen />
           <span>Products</span>
         </NavLink>
+
         <NavLink
           to="/admin/orders"
           className={({ isActive }) =>
@@ -57,22 +62,20 @@ const AdminSidebar = () => {
           <FaClipboardList />
           <span>Orders</span>
         </NavLink>
-        <NavLink
-          to="/admin/shop"
-          className={({ isActive }) =>
-            isActive
-              ? 'bg-gray-700 text-white py-3 px-4 rounded flex items-center space-x-2'
-              : 'text-gray-300 hover:bg-gray-700 hover:text-white py-3 px-4 rounded flex items-center space-x-2'
-          }
-        >
-          <FaStore />
-          <span>Shop</span>
-        </NavLink>
       </nav>
-      <div className="mt-6">
+
+      <div className="p-4 space-y-2">
+        <Link
+          to="/shop"
+          className="block text-center text-gray-400 hover:text-white py-2 text-sm border border-gray-700 rounded hover:border-gray-600 transition-colors"
+        >
+          <FaStore className="inline mr-2" />
+          Back to Shop
+        </Link>
+
         <button
           onClick={handleLogout}
-          className="w-full bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded flex items-center justify-center space-x-2"
+          className="w-full bg-red-600 hover:bg-red-700 text-white py-3 px-4 rounded flex items-center justify-center space-x-2 transition-colors"
         >
           <FaSignOutAlt />
           <span>Logout</span>

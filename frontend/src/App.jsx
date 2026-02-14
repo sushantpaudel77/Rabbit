@@ -25,7 +25,7 @@ const App = () => {
     <BrowserRouter>
       <Toaster position="top-right" />
       <Routes>
-        {/* ############## USERS  ##############*/}
+        {/* ############## USERS  ############## */}
         <Route path="/" element={<UserLayout />}>
           {/* User Layout || Outlets */}
           <Route index element={<Home />} />
@@ -43,7 +43,7 @@ const App = () => {
           <Route path="my-orders" element={<MyOrdersPage />} />
         </Route>
 
-        {/* ############## ADMIN  ##############*/}
+        {/* ############## ADMIN  ############## */}
         <Route path="/admin" element={<AdminLayout />}>
           {/* Admin Layout */}
           <Route index element={<AdminHomePage />} />
