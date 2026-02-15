@@ -1,7 +1,7 @@
 const express = require('express');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
-const {protect} = require('../middleware/authMiddleware')
+const { protect } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
@@ -10,7 +10,7 @@ const router = express.Router();
 // @access public
 
 router.post('/register', async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, role } = req.body;
 
   try {
     let user = await User.findOne({ email });
@@ -18,7 +18,7 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    user = new User({ name, email, password });
+    user = new User({ name, email, password, role });
     await user.save(); // password will hash in pre-save hook
 
     // Create JWT Payload
@@ -44,7 +44,7 @@ router.post('/register', async (req, res) => {
     );
   } catch (error) {
     console.log(error);
-    res.status(500).send('Server Error');
+    res.status(500).json({ message: 'Server Error', error: error.message });
   }
 });
 
@@ -86,7 +86,7 @@ router.post('/login', async (req, res) => {
     );
   } catch (error) {
     console.log(error);
-    res.status(500).send('Server Error');
+    res.status(500).json({ message: 'Server Error', error: error.message });
   }
 });
 

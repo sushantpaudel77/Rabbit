@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const cartItemsSchema = new mongoose.Schema(
   {
     productId: {
@@ -8,7 +9,7 @@ const cartItemsSchema = new mongoose.Schema(
     },
     name: String,
     image: String,
-    price: String,
+    price: Number,
     size: String,
     color: String,
     quantity: {
@@ -31,7 +32,6 @@ const cartSchema = new mongoose.Schema(
     products: [cartItemsSchema],
     totalPrice: {
       type: Number,
-      default: true,
       default: 0,
     },
   },

@@ -155,7 +155,7 @@ router.get('/', async (req, res) => {
 
     // Filter logic
     if (collection && collection.toLocaleLowerCase() !== 'all') {
-      query.collections = collection;
+      query.collection = collection;
     }
 
     if (category && category.toLocaleLowerCase() !== 'all') {

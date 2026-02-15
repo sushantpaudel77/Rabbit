@@ -66,7 +66,7 @@ const AdminSidebar = () => {
 
       <div className="p-4 space-y-2">
         <Link
-          to="/shop"
+          to="/"
           className="block text-center text-gray-400 hover:text-white py-2 text-sm border border-gray-700 rounded hover:border-gray-600 transition-colors"
         >
           <FaStore className="inline mr-2" />

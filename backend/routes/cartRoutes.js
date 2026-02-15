@@ -32,8 +32,8 @@ router.post('/', async (req, res) => {
       const cartItemIndex = cart.products.findIndex(
         (p) =>
           p.productId.toString() === productId &&
-          p.size == size &&
-          p.color == color
+          p.size === size &&
+          p.color === color
       );
       if (cartItemIndex > -1) {
         // If the product already exists, update the quantity
@@ -183,60 +183,70 @@ router.get('/', async (req, res) => {
 // @desc Merge guest cart into user cart on login
 // @access Private
 router.post('/merge', protect, async (req, res) => {
+  console.log('req.body:', req.body);
+  console.log('req.headers:', req.headers);
   const { guestId } = req.body;
 
   try {
+    // Find the guest cart and user cart
     const guestCart = await Cart.findOne({ guestId });
     const userCart = await Cart.findOne({ user: req.user._id });
 
-    // ─────────────────────────────
-    // CASE 1 → No guest cart
-    // ─────────────────────────────
-    if (!guestCart) {
-      if (userCart) return res.status(200).json(userCart);
-      return res.status(404).json({ message: 'Guest cart not found' });
+    if (guestCart) {
+      if (guestCart.products.length === 0) {
+        return res.status(400).json({ message: 'Guest cart is empty' });
+      }
+      if (userCart) {
+        // Merge guest cart into user cart
+        guestCart.products.forEach((guestItem) => {
+          const cartItemIndex = userCart.products.findIndex(
+            (item) =>
+              item.productId.toString() === guestItem.productId.toString() &&
+              item.size === guestItem.size &&
+              item.color === guestItem.color
+          );
+          if (cartItemIndex > -1) {
+            // If the items exit in the user cart, update the quantity
+            userCart.products[cartItemIndex].quantity += guestItem.quantity;
+          } else {
+            // add the guest item to the cart
+            userCart.products.push(guestItem);
+          }
+        });
+
+        userCart.totalPrice = userCart.products.reduce(
+          (acc, item) => acc + item.price * item.quantity,
+          0
+        );
+        await userCart.save();
+
+        // Remove the guest cart after merging
+        try {
+          await Cart.findOneAndDelete({ guestId });
+        } catch (error) {
+          console.log('Error deleting guest cart: ', error);
+        }
+        res.status(200).json(userCart);
+      } else {
+        // If the user has no existing cart, assign the guest cart to the user
+        guestCart.user = req.user._id;
+        guestCart.guestId = undefined;
+        await guestCart.save();
+
+        res.status(200).json(guestCart);
+      }
+    } else {
+      if (userCart) {
+        // Guest cart has already been merged, return user cart
+        return res.status(200).json(userCart);
+      }
+      res.status(404).json({ message: 'Guest cart not found' });
     }
-
-    // ─────────────────────────────
-    // CASE 2 → Guest cart exists but empty
-    // ─────────────────────────────
-    if (guestCart.products.length === 0) {
-      return res.status(400).json({ message: 'Guest cart is empty' });
-    }
-
-    // ─────────────────────────────
-    // CASE 3 → User has NO cart
-    // assign guest cart to user
-    // ─────────────────────────────
-    if (!userCart) {
-      guestCart.user = req.user._id;
-      guestCart.guestId = undefined;
-
-      await guestCart.save();
-      return res.status(200).json(guestCart);
-    }
-
-    // ─────────────────────────────
-    // CASE 4 → Merge guest cart into user cart
-    // ─────────────────────────────
-    mergeCartItems(userCart, guestCart);
-
-    userCart.totalPrice = calculateTotal(userCart.products);
-
-    await userCart.save();
-
-    // delete guest cart after merge
-    await Cart.findOneAndDelete({ guestId });
-
-    return res.status(200).json(userCart);
   } catch (error) {
-    console.error('Merge cart error:', error);
-    res.status(500).json({
-      message: 'Server error',
-      error: error.message,
-    });
+    console.error(error);
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
-
 module.exports = router;
+
